@@ -9,7 +9,7 @@ const HOTEL_GOLD = 0xD4AF37;
 export async function handleWelkomSetup(interaction: ChatInputCommandInteraction) {
   const channel = interaction.options.getChannel("kanaal", true) as TextChannel;
   const bericht = interaction.options.getString("bericht") ??
-    "Welkom in **{server}**, {user}! Wij zijn verheugd u te mogen verwelkomen als onze nieuwste gast. Wij hopen dat uw verblijf aangenaam zal zijn. 🏨✨";
+    "Wij zijn verheugd u te mogen verwelkomen. Ons personeel staat 24/7 klaar om u te helpen. Geniet van uw verblijf! 🌟\n🔑 **Inchecken**\nBekijk onze kanalen en ontdek alles wat ons hotel te bieden heeft.\n🛎️ **Hulp nodig?**\nGebruik onze slash commando's of vraag het personeel.";
 
   await db.insert(guildConfigsTable).values({
     guildId: interaction.guildId!,
@@ -39,7 +39,8 @@ export async function handleWelkomTest(interaction: ChatInputCommandInteraction)
     return;
   }
 
-  const msg = (config.welcomeMessage ?? "Welkom in **{server}**, {user}! 🏨")
+  const DEFAULT_MSG = "Wij zijn verheugd u te mogen verwelkomen. Ons personeel staat 24/7 klaar om u te helpen. Geniet van uw verblijf! 🌟\n🔑 **Inchecken**\nBekijk onze kanalen en ontdek alles wat ons hotel te bieden heeft.\n🛎️ **Hulp nodig?**\nGebruik onze slash commando's of vraag het personeel.";
+  const msg = (config.welcomeMessage ?? DEFAULT_MSG)
     .replace("{user}", interaction.user.toString())
     .replace("{server}", interaction.guild?.name ?? "");
 
@@ -82,7 +83,8 @@ export async function onMemberJoin(member: GuildMember) {
     const channel = member.guild.channels.cache.get(config.welcomeChannelId) as TextChannel | undefined;
     if (!channel) return;
 
-    const msg = (config.welcomeMessage ?? "Welkom in **{server}**, {user}! 🏨")
+    const DEFAULT_MSG = "Wij zijn verheugd u te mogen verwelkomen. Ons personeel staat 24/7 klaar om u te helpen. Geniet van uw verblijf! 🌟\n🔑 **Inchecken**\nBekijk onze kanalen en ontdek alles wat ons hotel te bieden heeft.\n🛎️ **Hulp nodig?**\nGebruik onze slash commando's of vraag het personeel.";
+    const msg = (config.welcomeMessage ?? DEFAULT_MSG)
       .replace("{user}", member.toString())
       .replace("{server}", member.guild.name);
 
