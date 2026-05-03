@@ -21,6 +21,9 @@ import { minigameCommands } from "./commands/minigames";
 export const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent,
   ],
 });
 
@@ -54,6 +57,7 @@ client.once(Events.ClientReady, (readyClient) => {
   const token = process.env["DISCORD_BOT_TOKEN"]!;
   registerCommands(token, readyClient.user.id);
   startQotdScheduler(readyClient);
+  enablePrivilegedFeatures();
 });
 
 client.on(Events.InteractionCreate, handleInteraction);
