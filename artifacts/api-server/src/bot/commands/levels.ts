@@ -1,0 +1,33 @@
+import { SlashCommandBuilder, PermissionFlagsBits } from "discord.js";
+
+export const levelCommands = [
+  new SlashCommandBuilder()
+    .setName("rang")
+    .setDescription("Bekijk jouw hotelrang en XP")
+    .addUserOption((opt) =>
+      opt.setName("gebruiker").setDescription("Bekijk iemand anders zijn rang").setRequired(false)
+    ),
+
+  new SlashCommandBuilder()
+    .setName("ranglijst")
+    .setDescription("Bekijk de top 10 meest actieve hotelgasten"),
+
+  new SlashCommandBuilder()
+    .setName("beloning-toevoegen")
+    .setDescription("Koppel een rol aan een level als beloning")
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles)
+    .addIntegerOption((opt) =>
+      opt
+        .setName("level")
+        .setDescription("Bij welk level wordt de rol toegewezen?")
+        .setRequired(true)
+        .setMinValue(1)
+    )
+    .addRoleOption((opt) =>
+      opt.setName("rol").setDescription("De beloningsrol").setRequired(true)
+    ),
+
+  new SlashCommandBuilder()
+    .setName("beloning-lijst")
+    .setDescription("Bekijk alle levelbeloningen"),
+];
