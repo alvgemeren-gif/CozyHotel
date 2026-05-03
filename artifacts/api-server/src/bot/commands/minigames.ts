@@ -3,20 +3,12 @@ import { SlashCommandBuilder } from "discord.js";
 export const minigameCommands = [
   new SlashCommandBuilder()
     .setName("wordle")
-    .setDescription("Speel Wordle — raad het 5-letterwoord")
-    .addSubcommand((sub) =>
-      sub.setName("start").setDescription("Start een nieuw Wordle-spel")
-    )
-    .addSubcommand((sub) =>
-      sub
-        .setName("raad")
-        .setDescription("Doe een gok")
-        .addStringOption((opt) =>
-          opt
-            .setName("woord")
-            .setDescription("Een 5-letter Nederlands woord")
-            .setRequired(true)
-        )
+    .setDescription("Speel Wordle — raad het 5-letterwoord (laat 'woord' leeg om een nieuw spel te starten)")
+    .addStringOption((opt) =>
+      opt
+        .setName("woord")
+        .setDescription("Jouw gok (5 letters) — laat leeg om een nieuw spel te starten")
+        .setRequired(false)
     ),
 
   new SlashCommandBuilder()

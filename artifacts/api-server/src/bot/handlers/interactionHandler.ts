@@ -69,10 +69,11 @@ export async function handleInteraction(interaction: Interaction) {
       case "beloning-toevoegen": return await handleBeloningToevoegen(interaction);
       case "beloning-lijst": return await handleBeloningLijst(interaction);
 
-      case "wordle":
-        if (interaction.options.getSubcommand() === "start") return await handleWordleStart(interaction);
-        if (interaction.options.getSubcommand() === "raad") return await handleWordleGuess(interaction);
-        break;
+      case "wordle": {
+        const woord = interaction.options.getString("woord");
+        if (!woord) return await handleWordleStart(interaction);
+        return await handleWordleGuess(interaction);
+      }
 
       case "mijnenveger": return await handleMijnenveger(interaction);
 

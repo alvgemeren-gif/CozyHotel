@@ -75,7 +75,7 @@ export async function handleWordleGuess(interaction: ChatInputCommandInteraction
     return;
   }
 
-  const guess = interaction.options.getString("woord", true).toLowerCase();
+  const guess = (interaction.options.getString("woord") ?? "").toLowerCase();
 
   if (guess.length !== 5) {
     await interaction.reply({ content: "Jouw gok moet precies 5 letters lang zijn!", ephemeral: true });
