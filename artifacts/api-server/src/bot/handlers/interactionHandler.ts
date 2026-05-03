@@ -1,7 +1,7 @@
 import { Interaction, StringSelectMenuInteraction, ButtonInteraction } from "discord.js";
 import { logger } from "../../lib/logger";
 import { handleWelkomSetup, handleWelkomTest, handleLeaveSetup } from "./welcomeHandler";
-import { handleReviewRecept, handleReviewBoek, handleReviewCategories } from "./reviewHandler";
+import { handleReviewRecept, handleReviewBoek, handleReviewDrank, handleReviewCategories } from "./reviewHandler";
 import { handleRollenMenu, handleRoleToggle, handleRoleMenuSetupSelect, handleRoleMenuPublish, handleRoleMenuCancel } from "./roleMenuHandler";
 import { handleTellenSetup, handleTellenReset, handleTellenScore } from "./countingHandler";
 import { handleBalans, handleWerk, handleSteel, handleGokken, handleRijksten } from "./casinoHandler";
@@ -47,6 +47,7 @@ export async function handleInteraction(interaction: Interaction) {
       case "leave-setup": return await handleLeaveSetup(interaction);
 
       case "review-recept": return await handleReviewRecept(interaction);
+      case "review-drank": return await handleReviewDrank(interaction);
       case "review-boek": return await handleReviewBoek(interaction);
 
       case "rollen-menu": return await handleRollenMenu(interaction);

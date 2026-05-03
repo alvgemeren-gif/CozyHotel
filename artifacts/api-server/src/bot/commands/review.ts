@@ -22,7 +22,6 @@ export const RECIPE_CATEGORIES = [
   { label: "🇮🇹 Italiaans", value: "italiaans" },
   { label: "🇳🇱 Nederlands", value: "nederlands" },
   { label: "🔥 BBQ", value: "bbq" },
-  { label: "🥤 Drank", value: "drank" },
   { label: "⚡ Snel klaar", value: "snel_klaar" },
   { label: "🎉 Feestelijk", value: "feestelijk" },
   { label: "💚 Gezond", value: "gezond" },
@@ -51,6 +50,42 @@ export const reviewCommands = [
         .setName("beschrijving")
         .setDescription("Korte beschrijving van het recept")
         .setRequired(false)
+    ),
+
+  new SlashCommandBuilder()
+    .setName("review-drank")
+    .setDescription("Review een drankje — cocktail, wijn, sap, etc.")
+    .addStringOption((opt) =>
+      opt.setName("naam").setDescription("Naam van het drankje").setRequired(true)
+    )
+    .addStringOption((opt) =>
+      opt
+        .setName("soort")
+        .setDescription("Soort drank")
+        .setRequired(true)
+        .addChoices(
+          { name: "🍸 Cocktail", value: "Cocktail" },
+          { name: "🍷 Wijn", value: "Wijn" },
+          { name: "🍺 Bier", value: "Bier" },
+          { name: "🥂 Champagne / Prosecco", value: "Champagne" },
+          { name: "🫖 Thee", value: "Thee" },
+          { name: "☕ Koffie", value: "Koffie" },
+          { name: "🧃 Sap / Smoothie", value: "Sap" },
+          { name: "🥤 Frisdrank", value: "Frisdrank" },
+          { name: "💧 Water", value: "Water" },
+          { name: "🍹 Anders", value: "Anders" }
+        )
+    )
+    .addIntegerOption((opt) =>
+      opt
+        .setName("rating")
+        .setDescription("Beoordeling (1-5 sterren)")
+        .setRequired(true)
+        .setMinValue(1)
+        .setMaxValue(5)
+    )
+    .addStringOption((opt) =>
+      opt.setName("beschrijving").setDescription("Korte omschrijving of smaaknotitie").setRequired(false)
     ),
 
   new SlashCommandBuilder()

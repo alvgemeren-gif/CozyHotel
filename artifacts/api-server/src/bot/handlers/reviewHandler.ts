@@ -91,6 +91,38 @@ export async function handleReviewCategories(interaction: StringSelectMenuIntera
   await interaction.channel?.send({ embeds: [embed] });
 }
 
+export async function handleReviewDrank(interaction: ChatInputCommandInteraction) {
+  const naam = interaction.options.getString("naam", true);
+  const soort = interaction.options.getString("soort", true);
+  const rating = interaction.options.getInteger("rating", true);
+  const description = interaction.options.getString("beschrijving") ?? undefined;
+
+  await db.insert(reviewsTable).values({
+    guildId: interaction.guildId!,
+    type: "drank",
+    title: naam,
+    categories: soort,
+    rating,
+    description,
+    reviewerId: interaction.user.id,
+    reviewerName: interaction.user.username,
+  });
+
+  const embed = new EmbedBuilder()
+    .setColor(0x1E90FF)
+    .setTitle("🥤 Drankreview")
+    .setDescription(`**${naam}**`)
+    .addFields(
+      { name: "🍶 Soort", value: soort, inline: true },
+      { name: "⭐ Beoordeling", value: starRating(rating), inline: true },
+      ...(description ? [{ name: "📝 Smaaknotitie", value: description }] : [])
+    )
+    .setFooter({ text: `Review door ${interaction.user.username} • Hotel Bar` })
+    .setTimestamp();
+
+  await interaction.reply({ embeds: [embed] });
+}
+
 export async function handleReviewBoek(interaction: ChatInputCommandInteraction) {
   const title = interaction.options.getString("titel", true);
   const author = interaction.options.getString("schrijver", true);
