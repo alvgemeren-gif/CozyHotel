@@ -12,6 +12,9 @@ import {
   StringSelectMenuOptionBuilder,
   StringSelectMenuInteraction,
 } from "discord.js";
+import { db } from "@workspace/db";
+import { levelRewardsTable } from "@workspace/db";
+import { and, eq } from "drizzle-orm";
 import { logger } from "../../lib/logger";
 
 const HOTEL_GOLD = 0xD4AF37;
@@ -247,7 +250,25 @@ export async function handleRoleToggle(interaction: ButtonInteraction) {
   await interaction.deferReply({ ephemeral: true });
 
   try {
-    if (member.roles.cache.has(roleId)) {
+    const hasRole = member.roles.cache.has(roleId);
+
+    // Block removal if this role is a level reward — it must be kept permanently
+    if (hasRole) {
+      const isReward = await db.query.levelRewardsTable.findFirst({
+        where: and(
+          eq(levelRewardsTable.guildId, guild.id),
+          eq(levelRewardsTable.roleId, roleId)
+        ),
+      });
+      if (isReward) {
+        await interaction.editReply({
+          content: `🔒 De rol **${role.name}** is een levelbeloning en kan niet worden verwijderd.`,
+        });
+        return;
+      }
+    }
+
+    if (hasRole) {
       await member.roles.remove(role);
       await interaction.editReply({ content: `❌ De rol **${role.name}** is van jou verwijderd.` });
     } else {

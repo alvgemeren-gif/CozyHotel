@@ -1,7 +1,7 @@
 import { ChatInputCommandInteraction, EmbedBuilder, GuildMember, Message } from "discord.js";
 import { db } from "@workspace/db";
 import { levelsTable, levelRewardsTable } from "@workspace/db";
-import { eq, and, desc } from "drizzle-orm";
+import { eq, and, desc, lte, gt } from "drizzle-orm";
 import { logger } from "../../lib/logger";
 
 const HOTEL_GOLD = 0xD4AF37;
@@ -59,17 +59,20 @@ export async function handleMessageXP(message: Message) {
         .setTimestamp();
       await message.channel.send({ embeds: [embed] });
 
+      // Give ALL reward roles for every level from oldLevel+1 up to newLevel
+      // so no reward is ever skipped when multiple levels are gained at once
       const rewards = await db.query.levelRewardsTable.findMany({
         where: and(
           eq(levelRewardsTable.guildId, message.guild.id),
-          eq(levelRewardsTable.level, newLevel)
+          gt(levelRewardsTable.level, oldLevel),
+          lte(levelRewardsTable.level, newLevel)
         ),
       });
 
+      const member = message.member as GuildMember;
       for (const reward of rewards) {
         const role = message.guild.roles.cache.get(reward.roleId);
-        if (role) {
-          const member = message.member as GuildMember;
+        if (role && !member.roles.cache.has(role.id)) {
           await member.roles.add(role).catch(() => {});
         }
       }
