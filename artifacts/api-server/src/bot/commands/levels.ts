@@ -30,4 +30,19 @@ export const levelCommands = [
   new SlashCommandBuilder()
     .setName("beloning-lijst")
     .setDescription("Bekijk alle levelbeloningen"),
+
+  new SlashCommandBuilder()
+    .setName("beloning-verwijderen")
+    .setDescription("Verwijder een levelbeloning")
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles)
+    .addIntegerOption((opt) =>
+      opt
+        .setName("level")
+        .setDescription("Het level waarvan je de beloning wil verwijderen")
+        .setRequired(true)
+        .setMinValue(1)
+    )
+    .addRoleOption((opt) =>
+      opt.setName("rol").setDescription("De beloningsrol om te verwijderen").setRequired(true)
+    ),
 ];

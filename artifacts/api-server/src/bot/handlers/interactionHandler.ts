@@ -7,7 +7,7 @@ import { handleTellenSetup, handleTellenReset, handleTellenScore } from "./count
 import { handleBalans, handleWerk, handleSteel, handleGokken, handleRijksten } from "./casinoHandler";
 import { handleQotdSetup, handleQotdStuur } from "./qotdHandler";
 import { handleAutoroleToevoegen, handleAutoroleVerwijderen, handleAutoroleLijst } from "./autoroleHandler";
-import { handleRang, handleRanglijst, handleBeloningToevoegen, handleBeloningLijst } from "./levelHandler";
+import { handleRang, handleRanglijst, handleBeloningToevoegen, handleBeloningLijst, handleBeloningVerwijderen } from "./levelHandler";
 import {
   handleWordleStart, handleWordleGuess,
   handleMijnenveger,
@@ -72,6 +72,7 @@ export async function handleInteraction(interaction: Interaction) {
       case "ranglijst": return await handleRanglijst(interaction);
       case "beloning-toevoegen": return await handleBeloningToevoegen(interaction);
       case "beloning-lijst": return await handleBeloningLijst(interaction);
+      case "beloning-verwijderen": return await handleBeloningVerwijderen(interaction);
 
       case "wordle": {
         const woord = interaction.options.getString("woord");
