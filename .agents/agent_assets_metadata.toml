@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "tQpZHVIx4EYBiARcocnXE"
+uri = "file://hotel-discord-bot.tar.gz"
+type = "unspecified"
+title = "Hotel Discord Bot — bronbestanden"
