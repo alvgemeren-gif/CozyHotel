@@ -1,8 +1,8 @@
-import { Interaction, StringSelectMenuInteraction } from "discord.js";
+import { Interaction, StringSelectMenuInteraction, ButtonInteraction } from "discord.js";
 import { logger } from "../../lib/logger";
 import { handleWelkomSetup, handleWelkomTest, handleLeaveSetup } from "./welcomeHandler";
 import { handleReviewRecept, handleReviewBoek, handleReviewCategories } from "./reviewHandler";
-import { handleRollenMenu, handleRoleMenuSelect } from "./roleMenuHandler";
+import { handleRollenMenu, handleRoleToggle } from "./roleMenuHandler";
 import { handleTellenSetup, handleTellenReset, handleTellenScore } from "./countingHandler";
 import { handleBalans, handleWerk, handleSteel, handleGokken, handleRijksten } from "./casinoHandler";
 import { handleQotdSetup, handleQotdStuur } from "./qotdHandler";
@@ -19,13 +19,14 @@ export async function handleInteraction(interaction: Interaction) {
     if (interaction.isStringSelectMenu()) {
       if (interaction.customId.startsWith("review_categories:")) {
         await handleReviewCategories(interaction as StringSelectMenuInteraction);
-      } else if (interaction.customId.startsWith("rolemenu_select:")) {
-        await handleRoleMenuSelect(interaction as StringSelectMenuInteraction);
       }
       return;
     }
 
     if (interaction.isButton()) {
+      if (interaction.customId.startsWith("role_toggle:")) {
+        await handleRoleToggle(interaction as ButtonInteraction);
+      }
       return;
     }
 
