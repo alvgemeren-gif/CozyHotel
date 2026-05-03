@@ -7,10 +7,6 @@ import {
 } from "discord.js";
 import { logger } from "../lib/logger";
 import { handleInteraction } from "./handlers/interactionHandler";
-import { handleCountingMessage } from "./handlers/countingHandler";
-import { handleMessageXP } from "./handlers/levelHandler";
-import { onMemberJoin, onMemberLeave } from "./handlers/welcomeHandler";
-import { applyAutoroles } from "./handlers/autoroleHandler";
 import { startQotdScheduler } from "./handlers/qotdHandler";
 import { welcomeCommands } from "./commands/welcome";
 import { reviewCommands } from "./commands/review";
@@ -25,9 +21,6 @@ import { minigameCommands } from "./commands/minigames";
 export const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMembers,   // Vereist: zet "Server Members Intent" aan in Developer Portal
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent, // Vereist: zet "Message Content Intent" aan in Developer Portal
   ],
 });
 
@@ -65,22 +58,6 @@ client.once(Events.ClientReady, (readyClient) => {
 
 client.on(Events.InteractionCreate, handleInteraction);
 
-client.on(Events.MessageCreate, async (message) => {
-  if (message.author.bot) return;
-  await handleCountingMessage(message);
-  await handleMessageXP(message);
-});
-
-client.on(Events.GuildMemberAdd, async (member) => {
-  await onMemberJoin(member);
-  await applyAutoroles(member);
-});
-
-client.on(Events.GuildMemberRemove, async (member) => {
-  if (member.partial) return;
-  await onMemberLeave(member as import("discord.js").GuildMember);
-});
-
 client.on(Events.Error, (err) => {
   logger.error({ err }, "Discord client error");
 });
@@ -94,4 +71,29 @@ export function startBot() {
   client.login(token).catch((err) => {
     logger.error({ err }, "Failed to login Discord bot");
   });
+}
+
+export function enablePrivilegedFeatures() {
+  const { handleCountingMessage } = require("./handlers/countingHandler");
+  const { handleMessageXP } = require("./handlers/levelHandler");
+  const { onMemberJoin, onMemberLeave } = require("./handlers/welcomeHandler");
+  const { applyAutoroles } = require("./handlers/autoroleHandler");
+
+  client.on(Events.MessageCreate, async (message: import("discord.js").Message) => {
+    if (message.author.bot) return;
+    await handleCountingMessage(message);
+    await handleMessageXP(message);
+  });
+
+  client.on(Events.GuildMemberAdd, async (member: import("discord.js").GuildMember) => {
+    await onMemberJoin(member);
+    await applyAutoroles(member);
+  });
+
+  client.on(Events.GuildMemberRemove, async (member: import("discord.js").GuildMember | import("discord.js").PartialGuildMember) => {
+    if (member.partial) return;
+    await onMemberLeave(member as import("discord.js").GuildMember);
+  });
+
+  logger.info("Privileged features enabled (counting, XP, welcome/leave, autoroles)");
 }
