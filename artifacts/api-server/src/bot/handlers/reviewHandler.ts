@@ -22,8 +22,7 @@ const pendingReviews = new Map<string, {
 }>();
 
 function starRating(n: number): string {
-  const full = Math.round(n / 2);
-  return "⭐".repeat(full) + "☆".repeat(5 - full) + ` (${n}/10)`;
+  return "⭐".repeat(n) + "☆".repeat(5 - n) + ` (${n}/5)`;
 }
 
 export async function handleReviewRecept(interaction: ChatInputCommandInteraction) {

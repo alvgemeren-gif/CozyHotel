@@ -41,10 +41,10 @@ export const reviewCommands = [
     .addIntegerOption((opt) =>
       opt
         .setName("rating")
-        .setDescription("Beoordeling (1-10)")
+        .setDescription("Beoordeling (1-5 sterren)")
         .setRequired(true)
         .setMinValue(1)
-        .setMaxValue(10)
+        .setMaxValue(5)
     )
     .addStringOption((opt) =>
       opt
@@ -65,10 +65,10 @@ export const reviewCommands = [
     .addIntegerOption((opt) =>
       opt
         .setName("rating")
-        .setDescription("Beoordeling (1-10)")
+        .setDescription("Beoordeling (1-5 sterren)")
         .setRequired(true)
         .setMinValue(1)
-        .setMaxValue(10)
+        .setMaxValue(5)
     )
     .addStringOption((opt) =>
       opt
