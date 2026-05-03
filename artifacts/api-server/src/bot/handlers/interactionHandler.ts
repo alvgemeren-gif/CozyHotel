@@ -1,8 +1,8 @@
-import { Interaction, StringSelectMenuInteraction, ButtonInteraction } from "discord.js";
+import { Interaction, StringSelectMenuInteraction } from "discord.js";
 import { logger } from "../../lib/logger";
 import { handleWelkomSetup, handleWelkomTest, handleLeaveSetup } from "./welcomeHandler";
 import { handleReviewRecept, handleReviewBoek, handleReviewCategories } from "./reviewHandler";
-import { handleRoleMenuMaak, handleRoleMenuRol, handleRoleMenuLijst, handleRoleToggle } from "./roleMenuHandler";
+import { handleRollenMenu, handleRoleMenuSelect } from "./roleMenuHandler";
 import { handleTellenSetup, handleTellenReset, handleTellenScore } from "./countingHandler";
 import { handleBalans, handleWerk, handleSteel, handleGokken, handleRijksten } from "./casinoHandler";
 import { handleQotdSetup, handleQotdStuur } from "./qotdHandler";
@@ -19,14 +19,13 @@ export async function handleInteraction(interaction: Interaction) {
     if (interaction.isStringSelectMenu()) {
       if (interaction.customId.startsWith("review_categories:")) {
         await handleReviewCategories(interaction as StringSelectMenuInteraction);
+      } else if (interaction.customId.startsWith("rolemenu_select:")) {
+        await handleRoleMenuSelect(interaction as StringSelectMenuInteraction);
       }
       return;
     }
 
     if (interaction.isButton()) {
-      if (interaction.customId.startsWith("role_toggle:")) {
-        await handleRoleToggle(interaction as ButtonInteraction);
-      }
       return;
     }
 
@@ -43,9 +42,7 @@ export async function handleInteraction(interaction: Interaction) {
       case "review-recept": return await handleReviewRecept(interaction);
       case "review-boek": return await handleReviewBoek(interaction);
 
-      case "role-menu-maak": return await handleRoleMenuMaak(interaction);
-      case "role-menu-rol": return await handleRoleMenuRol(interaction);
-      case "role-menu-lijst": return await handleRoleMenuLijst(interaction);
+      case "rollen-menu": return await handleRollenMenu(interaction);
 
       case "tellen-setup": return await handleTellenSetup(interaction);
       case "tellen-reset": return await handleTellenReset(interaction);

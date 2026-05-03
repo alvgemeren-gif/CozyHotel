@@ -1,42 +1,47 @@
-import { SlashCommandBuilder, PermissionFlagsBits, ChannelType } from "discord.js";
+import { SlashCommandBuilder, PermissionFlagsBits } from "discord.js";
 
 export const roleMenuCommands = [
   new SlashCommandBuilder()
-    .setName("role-menu-maak")
-    .setDescription("Maak een klikbaar rollen-menu aan in een kanaal")
+    .setName("rollen-menu")
+    .setDescription("Maak een klikbaar rollenmenu met een dropdown")
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles)
     .addStringOption((opt) =>
-      opt
-        .setName("titel")
-        .setDescription("Titel van het rollen-menu")
-        .setRequired(true)
+      opt.setName("titel").setDescription("Titel van het rollenmenu").setRequired(true)
+    )
+    .addRoleOption((opt) =>
+      opt.setName("rol1").setDescription("Rol 1").setRequired(true)
+    )
+    .addRoleOption((opt) =>
+      opt.setName("rol2").setDescription("Rol 2").setRequired(false)
+    )
+    .addRoleOption((opt) =>
+      opt.setName("rol3").setDescription("Rol 3").setRequired(false)
+    )
+    .addRoleOption((opt) =>
+      opt.setName("rol4").setDescription("Rol 4").setRequired(false)
+    )
+    .addRoleOption((opt) =>
+      opt.setName("rol5").setDescription("Rol 5").setRequired(false)
+    )
+    .addRoleOption((opt) =>
+      opt.setName("rol6").setDescription("Rol 6").setRequired(false)
+    )
+    .addRoleOption((opt) =>
+      opt.setName("rol7").setDescription("Rol 7").setRequired(false)
+    )
+    .addRoleOption((opt) =>
+      opt.setName("rol8").setDescription("Rol 8").setRequired(false)
+    )
+    .addRoleOption((opt) =>
+      opt.setName("rol9").setDescription("Rol 9").setRequired(false)
+    )
+    .addRoleOption((opt) =>
+      opt.setName("rol10").setDescription("Rol 10").setRequired(false)
     )
     .addStringOption((opt) =>
       opt
         .setName("beschrijving")
-        .setDescription("Beschrijving van het rollen-menu")
+        .setDescription("Beschrijving onder de titel")
         .setRequired(false)
     ),
-
-  new SlashCommandBuilder()
-    .setName("role-menu-rol")
-    .setDescription("Voeg een rol toe aan het keuzemenu of verwijder deze")
-    .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles)
-    .addRoleOption((opt) =>
-      opt.setName("rol").setDescription("De rol om toe te voegen of te verwijderen").setRequired(true)
-    )
-    .addStringOption((opt) =>
-      opt
-        .setName("actie")
-        .setDescription("Toevoegen of verwijderen?")
-        .setRequired(true)
-        .addChoices(
-          { name: "Toevoegen", value: "add" },
-          { name: "Verwijderen", value: "remove" }
-        )
-    ),
-
-  new SlashCommandBuilder()
-    .setName("role-menu-lijst")
-    .setDescription("Bekijk de geconfigureerde rollen in het keuzemenu"),
 ];
