@@ -19,6 +19,8 @@ import { levelCommands } from "./commands/levels";
 import { minigameCommands } from "./commands/minigames";
 import { ticketCommands } from "./commands/tickets";
 import { embedCommands } from "./commands/embeds";
+import { starboardCommands } from "./commands/starboard";
+import { handleReactionAdd } from "./handlers/starboardHandler";
 
 export const client = new Client({
   intents: [
@@ -26,6 +28,7 @@ export const client = new Client({
     GatewayIntentBits.GuildMembers,
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildMessageReactions,
   ],
 });
 
@@ -41,6 +44,7 @@ const allCommands = [
   ...minigameCommands,
   ...ticketCommands,
   ...embedCommands,
+  ...starboardCommands,
 ];
 
 async function registerCommands(token: string, clientId: string) {
@@ -65,6 +69,10 @@ client.once(Events.ClientReady, (readyClient) => {
 });
 
 client.on(Events.InteractionCreate, handleInteraction);
+
+client.on(Events.MessageReactionAdd, async (reaction, user) => {
+  await handleReactionAdd(reaction, user);
+});
 
 client.on(Events.Error, (err) => {
   logger.error({ err }, "Discord client error");

@@ -6,3 +6,4 @@ export * from "./reviews";
 export * from "./autoroles";
 export * from "./levelRewards";
 export * from "./roleMenus";
+export * from "./starboardPosts";

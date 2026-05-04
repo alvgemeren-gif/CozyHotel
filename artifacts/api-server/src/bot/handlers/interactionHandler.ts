@@ -10,6 +10,7 @@ import { handleAutoroleToevoegen, handleAutoroleVerwijderen, handleAutoroleLijst
 import { handleRang, handleRanglijst, handleBeloningToevoegen, handleBeloningLijst, handleBeloningVerwijderen } from "./levelHandler";
 import { handleTicketSetup, handleTicketOpen, handleTicketClose, handleTicketConfirmClose, handleTicketCancelClose } from "./ticketHandler";
 import { handleEmbed, handleEmbedBewerk } from "./embedHandler";
+import { handleStarboardSetup, handleStarboardInfo } from "./starboardHandler";
 import {
   handleWordleStart, handleWordleGuess,
   handleMijnenveger,
@@ -95,6 +96,9 @@ export async function handleInteraction(interaction: Interaction) {
 
       case "embed": return await handleEmbed(interaction);
       case "embed-bewerk": return await handleEmbedBewerk(interaction);
+
+      case "starboard-setup": return await handleStarboardSetup(interaction);
+      case "starboard-info": return await handleStarboardInfo(interaction);
 
       case "mijnenveger": return await handleMijnenveger(interaction);
 
