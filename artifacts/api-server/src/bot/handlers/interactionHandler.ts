@@ -7,7 +7,7 @@ import { handleTellenSetup, handleTellenReset, handleTellenScore } from "./count
 import { handleBalans, handleWerk, handleSteel, handleGokken, handleRijksten } from "./casinoHandler";
 import { handleQotdSetup, handleQotdStuur } from "./qotdHandler";
 import { handleAutoroleToevoegen, handleAutoroleVerwijderen, handleAutoroleLijst } from "./autoroleHandler";
-import { handleRang, handleRanglijst, handleBeloningToevoegen, handleBeloningLijst, handleBeloningVerwijderen } from "./levelHandler";
+import { handleRang, handleRanglijst, handleBeloningToevoegen, handleBeloningLijst, handleBeloningVerwijderen, handleLevelUpSetup, handleLevelBeloningenWissen } from "./levelHandler";
 import { handleTicketSetup, handleTicketOpen, handleTicketClose, handleTicketConfirmClose, handleTicketCancelClose } from "./ticketHandler";
 import { handleEmbed, handleEmbedBewerk } from "./embedHandler";
 import { handleStarboardSetup, handleStarboardInfo } from "./starboardHandler";
@@ -82,6 +82,8 @@ export async function handleInteraction(interaction: Interaction) {
 
       case "rang": return await handleRang(interaction);
       case "ranglijst": return await handleRanglijst(interaction);
+      case "level-up-setup": return await handleLevelUpSetup(interaction);
+      case "level-beloningen-wissen": return await handleLevelBeloningenWissen(interaction);
       case "beloning-toevoegen": return await handleBeloningToevoegen(interaction);
       case "beloning-lijst": return await handleBeloningLijst(interaction);
       case "beloning-verwijderen": return await handleBeloningVerwijderen(interaction);
