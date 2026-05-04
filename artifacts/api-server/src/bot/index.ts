@@ -80,17 +80,37 @@ client.on(Events.Error, (err) => {
 
 export function startBot() {
   const token = process.env["DISCORD_BOT_TOKEN"];
+
   if (!token) {
-    logger.error("DISCORD_BOT_TOKEN is not set, bot will not start");
+    console.error("DISCORD_BOT_TOKEN missing");
     return;
   }
+
   console.log("LOGIN START");
 
-client.login(token)
-  .then(() => console.log("LOGIN OK"))
-  .catch((err) => console.error("LOGIN FAILED", err));
-}
+  // 🧠 BOT READY EVENT (belangrijk)
+  client.once(Events.ClientReady, (readyClient) => {
+    console.log("BOT READY:", readyClient.user.tag);
+  });
 
+  // 🧠 GLOBAL ERROR HANDLING (crashes zichtbaar maken)
+  client.on("error", (err) => {
+    console.error("DISCORD CLIENT ERROR:", err);
+  });
+
+  process.on("unhandledRejection", (err) => {
+    console.error("UNHANDLED REJECTION:", err);
+  });
+
+  process.on("uncaughtException", (err) => {
+    console.error("UNCAUGHT EXCEPTION:", err);
+  });
+
+  // 🚀 LOGIN
+  client.login(token)
+    .then(() => console.log("LOGIN OK"))
+    .catch((err) => console.error("LOGIN FAILED:", err));
+}
 export function enablePrivilegedFeatures() {
   const { handleCountingMessage } = require("./handlers/countingHandler");
   const { handleMessageXP } = require("./handlers/levelHandler");
