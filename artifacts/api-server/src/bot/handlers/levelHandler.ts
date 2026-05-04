@@ -1,6 +1,6 @@
-import { ChatInputCommandInteraction, EmbedBuilder, GuildMember, Message } from "discord.js";
+import { ChatInputCommandInteraction, EmbedBuilder, GuildMember, Message, TextChannel } from "discord.js";
 import { db } from "@workspace/db";
-import { levelsTable, levelRewardsTable } from "@workspace/db";
+import { levelsTable, levelRewardsTable, guildConfigsTable } from "@workspace/db";
 import { eq, and, desc, lte, gt } from "drizzle-orm";
 import { logger } from "../../lib/logger";
 
@@ -34,6 +34,17 @@ export function getRankTitle(level: number): string {
   return HOTEL_RANKS[idx]!;
 }
 
+async function getLevelUpChannel(message: Message): Promise<TextChannel | null> {
+  const config = await db.query.guildConfigsTable.findFirst({
+    where: eq(guildConfigsTable.guildId, message.guild!.id),
+  });
+
+  if (!config?.levelUpChannelId) return null;
+  const channel = message.guild!.channels.cache.get(config.levelUpChannelId);
+  if (!channel || !channel.isTextBased()) return null;
+  return channel as TextChannel;
+}
+
 export async function handleMessageXP(message: Message) {
   if (!message.guild || message.author.bot) return;
   try {
@@ -57,10 +68,14 @@ export async function handleMessageXP(message: Message) {
         .setDescription(`${message.author} is opgeklommen naar **Level ${newLevel}** — ${getRankTitle(newLevel)}!\nWelkom op de volgende verdieping van het hotel! 🏨`)
         .setThumbnail(message.author.displayAvatarURL())
         .setTimestamp();
-      await message.channel.send({ embeds: [embed] });
 
-      // Give ALL reward roles for every level from oldLevel+1 up to newLevel
-      // so no reward is ever skipped when multiple levels are gained at once
+      const levelUpChannel = await getLevelUpChannel(message);
+      if (levelUpChannel) {
+        await levelUpChannel.send({ embeds: [embed] });
+      } else {
+        await message.channel.send({ embeds: [embed] });
+      }
+
       const rewards = await db.query.levelRewardsTable.findMany({
         where: and(
           eq(levelRewardsTable.guildId, message.guild.id),
@@ -80,6 +95,19 @@ export async function handleMessageXP(message: Message) {
   } catch (err) {
     logger.error({ err }, "XP handler error");
   }
+}
+
+export async function handleLevelUpSetup(interaction: ChatInputCommandInteraction) {
+  const channel = interaction.options.getChannel("kanaal", true);
+
+  await db.update(guildConfigsTable)
+    .set({ levelUpChannelId: channel.id })
+    .where(eq(guildConfigsTable.guildId, interaction.guildId!));
+
+  await interaction.reply({
+    content: `✅ Level-up berichten worden voortaan gestuurd naar ${channel}.`,
+    ephemeral: true,
+  });
 }
 
 export async function handleRang(interaction: ChatInputCommandInteraction) {

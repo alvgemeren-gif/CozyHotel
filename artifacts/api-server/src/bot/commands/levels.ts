@@ -13,6 +13,14 @@ export const levelCommands = [
     .setDescription("Bekijk de top 10 meest actieve hotelgasten"),
 
   new SlashCommandBuilder()
+    .setName("level-up-setup")
+    .setDescription("Stel het kanaal in voor level-up berichten")
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
+    .addChannelOption((opt) =>
+      opt.setName("kanaal").setDescription("Kanaal voor level-up berichten").setRequired(true)
+    ),
+
+  new SlashCommandBuilder()
     .setName("beloning-toevoegen")
     .setDescription("Koppel een rol aan een level als beloning")
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles)
