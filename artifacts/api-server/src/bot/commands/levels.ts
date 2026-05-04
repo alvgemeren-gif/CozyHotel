@@ -21,6 +21,11 @@ export const levelCommands = [
     ),
 
   new SlashCommandBuilder()
+    .setName("level-beloningen-wissen")
+    .setDescription("Wis alle level-up beloningsrollen")
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles),
+
+  new SlashCommandBuilder()
     .setName("beloning-toevoegen")
     .setDescription("Koppel een rol aan een level als beloning")
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles)

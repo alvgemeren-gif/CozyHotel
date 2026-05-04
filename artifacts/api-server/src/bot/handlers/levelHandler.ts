@@ -110,6 +110,14 @@ export async function handleLevelUpSetup(interaction: ChatInputCommandInteractio
   });
 }
 
+export async function handleLevelBeloningenWissen(interaction: ChatInputCommandInteraction) {
+  await db.delete(levelRewardsTable).where(eq(levelRewardsTable.guildId, interaction.guildId!));
+  await interaction.reply({
+    content: "✅ Alle level-up beloningsrollen zijn gewist. Je kunt ze nu opnieuw instellen.",
+    ephemeral: true,
+  });
+}
+
 export async function handleRang(interaction: ChatInputCommandInteraction) {
   const target = interaction.options.getUser("gebruiker") ?? interaction.user;
   const entry = await getOrCreate(target.id, interaction.guildId!, target.username);
