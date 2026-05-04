@@ -17,6 +17,8 @@ import { qotdCommands } from "./commands/qotd";
 import { autoroleCommands } from "./commands/autoroles";
 import { levelCommands } from "./commands/levels";
 import { minigameCommands } from "./commands/minigames";
+import { ticketCommands } from "./commands/tickets";
+import { embedCommands } from "./commands/embeds";
 
 export const client = new Client({
   intents: [
@@ -37,6 +39,8 @@ const allCommands = [
   ...autoroleCommands,
   ...levelCommands,
   ...minigameCommands,
+  ...ticketCommands,
+  ...embedCommands,
 ];
 
 async function registerCommands(token: string, clientId: string) {

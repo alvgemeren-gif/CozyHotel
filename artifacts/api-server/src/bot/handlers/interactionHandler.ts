@@ -8,6 +8,8 @@ import { handleBalans, handleWerk, handleSteel, handleGokken, handleRijksten } f
 import { handleQotdSetup, handleQotdStuur } from "./qotdHandler";
 import { handleAutoroleToevoegen, handleAutoroleVerwijderen, handleAutoroleLijst } from "./autoroleHandler";
 import { handleRang, handleRanglijst, handleBeloningToevoegen, handleBeloningLijst, handleBeloningVerwijderen } from "./levelHandler";
+import { handleTicketSetup, handleTicketOpen, handleTicketClose, handleTicketConfirmClose, handleTicketCancelClose } from "./ticketHandler";
+import { handleEmbed, handleEmbedBewerk } from "./embedHandler";
 import {
   handleWordleStart, handleWordleGuess,
   handleMijnenveger,
@@ -21,6 +23,8 @@ export async function handleInteraction(interaction: Interaction) {
         await handleReviewCategories(interaction as StringSelectMenuInteraction);
       } else if (interaction.customId.startsWith("rolemenu_setup_select:")) {
         await handleRoleMenuSetupSelect(interaction as StringSelectMenuInteraction);
+      } else if (interaction.customId === "ticket_open") {
+        await handleTicketOpen(interaction as StringSelectMenuInteraction);
       }
       return;
     }
@@ -32,6 +36,12 @@ export async function handleInteraction(interaction: Interaction) {
         await handleRoleMenuPublish(interaction as ButtonInteraction);
       } else if (interaction.customId === "rolemenu_cancel") {
         await handleRoleMenuCancel(interaction as ButtonInteraction);
+      } else if (interaction.customId.startsWith("ticket_close:")) {
+        await handleTicketClose(interaction as ButtonInteraction);
+      } else if (interaction.customId === "ticket_confirm_close") {
+        await handleTicketConfirmClose(interaction as ButtonInteraction);
+      } else if (interaction.customId === "ticket_cancel_close") {
+        await handleTicketCancelClose(interaction as ButtonInteraction);
       }
       return;
     }
@@ -80,6 +90,11 @@ export async function handleInteraction(interaction: Interaction) {
         if (!woord) return await handleWordleStart(interaction);
         return await handleWordleGuess(interaction);
       }
+
+      case "ticket-setup": return await handleTicketSetup(interaction);
+
+      case "embed": return await handleEmbed(interaction);
+      case "embed-bewerk": return await handleEmbedBewerk(interaction);
 
       case "mijnenveger": return await handleMijnenveger(interaction);
 
