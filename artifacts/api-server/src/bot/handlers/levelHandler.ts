@@ -187,29 +187,27 @@ export async function handleBeloningToevoegen(interaction: ChatInputCommandInter
 
 export async function handleBeloningVerwijderen(interaction: ChatInputCommandInteraction) {
   const level = interaction.options.getInteger("level", true);
-  const role = interaction.options.getRole("rol", true);
 
   const deleted = await db
     .delete(levelRewardsTable)
     .where(
       and(
         eq(levelRewardsTable.guildId, interaction.guildId!),
-        eq(levelRewardsTable.level, level),
-        eq(levelRewardsTable.roleId, role.id)
+        eq(levelRewardsTable.level, level)
       )
     )
     .returning();
 
   if (deleted.length === 0) {
     await interaction.reply({
-      content: `❌ Er is geen beloning gevonden voor Level **${level}** met de rol **${role.name}**.`,
+      content: `❌ Er zijn geen beloningen gevonden voor Level **${level}**.`,
       ephemeral: true,
     });
     return;
   }
 
   await interaction.reply({
-    content: `✅ De beloning **${role.name}** op Level **${level}** is verwijderd.`,
+    content: `✅ Alle beloningen op Level **${level}** zijn verwijderd.`,
     ephemeral: true,
   });
 }
