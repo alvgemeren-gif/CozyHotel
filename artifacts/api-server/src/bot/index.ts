@@ -84,9 +84,11 @@ export function startBot() {
     logger.error("DISCORD_BOT_TOKEN is not set, bot will not start");
     return;
   }
-  client.login(token).catch((err) => {
-    logger.error({ err }, "Failed to login Discord bot");
-  });
+  console.log("LOGIN START");
+
+client.login(token)
+  .then(() => console.log("LOGIN OK"))
+  .catch((err) => console.error("LOGIN FAILED", err));
 }
 
 export function enablePrivilegedFeatures() {
