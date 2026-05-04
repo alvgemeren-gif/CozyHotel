@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, EmbedBuilder, GuildMember, Message, TextChannel } from "discord.js";
+import { ChatInputCommandInteraction, EmbedBuilder, GuildMember, Message } from "discord.js";
 import { db } from "@workspace/db";
 import { levelsTable, levelRewardsTable, guildConfigsTable } from "@workspace/db";
 import { eq, and, desc, lte, gt } from "drizzle-orm";
@@ -34,15 +34,15 @@ export function getRankTitle(level: number): string {
   return HOTEL_RANKS[idx]!;
 }
 
-async function getLevelUpChannel(message: Message): Promise<TextChannel | null> {
+async function getLevelUpChannel(message: Message): Promise<Message["channel"] | null> {
   const config = await db.query.guildConfigsTable.findFirst({
     where: eq(guildConfigsTable.guildId, message.guild!.id),
   });
 
   if (!config?.levelUpChannelId) return null;
   const channel = message.guild!.channels.cache.get(config.levelUpChannelId);
-  if (!channel || !channel.isTextBased()) return null;
-  return channel as TextChannel;
+  if (!channel || !channel.isTextBased() || !("send" in channel)) return null;
+  return channel;
 }
 
 export async function handleMessageXP(message: Message) {
@@ -72,8 +72,6 @@ export async function handleMessageXP(message: Message) {
       const levelUpChannel = await getLevelUpChannel(message);
       if (levelUpChannel) {
         await levelUpChannel.send({ embeds: [embed] });
-      } else {
-        await message.channel.send({ embeds: [embed] });
       }
 
       const rewards = await db.query.levelRewardsTable.findMany({
