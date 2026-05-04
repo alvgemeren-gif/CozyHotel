@@ -38,7 +38,7 @@ export const embedCommands = [
       opt.setName("titel").setDescription("Nieuwe titel (laat leeg = ongewijzigd)").setRequired(false)
     )
     .addStringOption((opt) =>
-      opt.setName("beschrijving").setDescription("Nieuwe beschrijving").setRequired(false)
+      opt.setName("beschrijving").setDescription("Nieuwe beschrijving (\n werkt als enter)").setRequired(false)
     )
     .addStringOption((opt) =>
       opt.setName("kleur").setDescription("Nieuwe kleur (hex)").setRequired(false)

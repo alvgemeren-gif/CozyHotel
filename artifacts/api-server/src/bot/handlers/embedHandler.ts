@@ -9,9 +9,13 @@ function parseColor(hex: string | null): number {
   return isNaN(parsed) ? HOTEL_GOLD : parsed;
 }
 
+function normalizeText(text: string): string {
+  return text.replace(/\\n/g, "\n");
+}
+
 export async function handleEmbed(interaction: ChatInputCommandInteraction) {
-  const titel = interaction.options.getString("titel", true);
-  const beschrijving = interaction.options.getString("beschrijving", true);
+  const titel = normalizeText(interaction.options.getString("titel", true));
+  const beschrijving = normalizeText(interaction.options.getString("beschrijving", true));
   const kleur = parseColor(interaction.options.getString("kleur"));
   const afbeelding = interaction.options.getString("afbeelding");
   const thumbnail = interaction.options.getString("thumbnail");
@@ -24,7 +28,7 @@ export async function handleEmbed(interaction: ChatInputCommandInteraction) {
 
   if (afbeelding) embed.setImage(afbeelding);
   if (thumbnail) embed.setThumbnail(thumbnail);
-  if (footer) embed.setFooter({ text: footer });
+  if (footer) embed.setFooter({ text: normalizeText(footer) });
 
   await interaction.reply({ content: "✅ Embed aangemaakt!", ephemeral: true });
   await interaction.channel?.send({ embeds: [embed] });
@@ -62,12 +66,12 @@ export async function handleEmbedBewerk(interaction: ChatInputCommandInteraction
 
   const nieuweEmbed = EmbedBuilder.from(oudeEmbed);
 
-  if (titel) nieuweEmbed.setTitle(titel);
-  if (beschrijving) nieuweEmbed.setDescription(beschrijving);
+  if (titel) nieuweEmbed.setTitle(normalizeText(titel));
+  if (beschrijving) nieuweEmbed.setDescription(normalizeText(beschrijving));
   if (kleurRaw) nieuweEmbed.setColor(parseColor(kleurRaw));
   if (afbeelding) nieuweEmbed.setImage(afbeelding);
   if (thumbnail) nieuweEmbed.setThumbnail(thumbnail);
-  if (footer) nieuweEmbed.setFooter({ text: footer });
+  if (footer) nieuweEmbed.setFooter({ text: normalizeText(footer) });
 
   await bericht.edit({ embeds: [nieuweEmbed] });
   await interaction.reply({ content: "✅ Embed bijgewerkt!", ephemeral: true });
